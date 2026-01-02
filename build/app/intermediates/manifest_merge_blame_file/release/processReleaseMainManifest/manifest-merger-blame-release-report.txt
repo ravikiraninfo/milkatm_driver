@@ -1,0 +1,227 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.milkshop_driver"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="35" />
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+14
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:42:5-47:15
+18        <intent>
+18-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:43:9-46:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:44:13-72
+19-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:44:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:45:13-50
+21-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:45:19-48
+22        </intent>
+23        <!-- Needs to be explicitly declared on Android R+ -->
+24        <package android:name="com.google.android.apps.maps" />
+24-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:29:7-61
+24-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:29:16-59
+25    </queries>
+26
+27    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+27-->[:connectivity_plus] /Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/build/connectivity_plus/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml:7:5-79
+27-->[:connectivity_plus] /Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/build/connectivity_plus/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml:7:22-76
+28    <uses-permission android:name="android.permission.INTERNET" />
+28-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:21:5-66
+28-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:21:22-64
+29
+30    <uses-feature
+30-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:22:5-24:33
+31        android:glEsVersion="0x00020000"
+31-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:23:8-40
+32        android:required="true" />
+32-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:24:8-31
+33
+34    <permission
+34-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+35        android:name="com.example.milkshop_driver.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+35-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+36        android:protectionLevel="signature" />
+36-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+37
+38    <uses-permission android:name="com.example.milkshop_driver.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+38-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+38-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+39
+40    <application
+41        android:name="android.app.Application"
+41-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:4:9-42
+42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+42-->[androidx.core:core:1.13.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/dfc2fbca530748e569b0737b09fa016f/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+43        android:extractNativeLibs="true"
+44        android:icon="@mipmap/ic_launcher"
+44-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:5:9-43
+45        android:label="milkshop_driver" >
+45-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:3:9-40
+46        <activity
+46-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:6:9-28:20
+47            android:name="com.example.milkshop_driver.MainActivity"
+47-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:7:13-41
+48            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+48-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:12:13-163
+49            android:exported="true"
+49-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:8:13-36
+50            android:hardwareAccelerated="true"
+50-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:13:13-47
+51            android:launchMode="singleTop"
+51-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:9:13-43
+52            android:taskAffinity=""
+52-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:10:13-36
+53            android:theme="@style/LaunchTheme"
+53-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:11:13-47
+54            android:windowSoftInputMode="adjustResize" >
+54-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:14:13-55
+55
+56            <!--
+57                 Specifies an Android theme to apply to this Activity as soon as
+58                 the Android process has started. This theme is visible to the user
+59                 while the Flutter UI initializes. After that, this theme continues
+60                 to determine the Window background behind the Flutter UI.
+61            -->
+62            <meta-data
+62-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:19:13-22:17
+63                android:name="io.flutter.embedding.android.NormalTheme"
+63-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:20:15-70
+64                android:resource="@style/NormalTheme" />
+64-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:21:15-52
+65
+66            <intent-filter>
+66-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:24:13-27:29
+67                <action android:name="android.intent.action.MAIN" />
+67-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:25:17-68
+67-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:25:25-66
+68
+69                <category android:name="android.intent.category.LAUNCHER" />
+69-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:26:17-76
+69-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:26:27-74
+70            </intent-filter>
+71        </activity>
+72        <!--
+73             Don't delete the meta-data below.
+74             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+75        -->
+76        <meta-data
+76-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:31:9-33:33
+77            android:name="flutterEmbedding"
+77-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:32:13-44
+78            android:value="2" />
+78-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:33:13-30
+79        <meta-data
+79-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:34:9-35:70
+80            android:name="com.google.android.geo.API_KEY"
+80-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:34:20-65
+81            android:value="AIzaSyC2bOpHYxHE6YhB9IR7oOL6TqlrjZ8xMKE" />
+81-->/Users/dreamworld/Documents/sahil/freelance_projects/milkshop_driver/android/app/src/main/AndroidManifest.xml:35:13-68
+82        <!-- Needs to be explicitly declared on P+ -->
+83        <uses-library
+83-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:33:7-86
+84            android:name="org.apache.http.legacy"
+84-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:33:21-58
+85            android:required="false" />
+85-->[com.google.android.gms:play-services-maps:19.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/0af2163ca8a254cebc342e25b97d766e/transformed/jetified-play-services-maps-19.2.0/AndroidManifest.xml:33:59-83
+86
+87        <activity
+87-->[com.google.android.gms:play-services-base:18.5.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/c26a5e61fe542527cf2bb32b2ba51b51/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:9-173
+88            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+88-->[com.google.android.gms:play-services-base:18.5.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/c26a5e61fe542527cf2bb32b2ba51b51/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:19-85
+89            android:exported="false"
+89-->[com.google.android.gms:play-services-base:18.5.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/c26a5e61fe542527cf2bb32b2ba51b51/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:146-170
+90            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+90-->[com.google.android.gms:play-services-base:18.5.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/c26a5e61fe542527cf2bb32b2ba51b51/transformed/jetified-play-services-base-18.5.0/AndroidManifest.xml:5:86-145
+91
+92        <meta-data
+92-->[com.google.android.gms:play-services-basement:18.4.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/daa46f0fdd16f05f69205eaa668178c9/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:9-122
+93            android:name="com.google.android.gms.version"
+93-->[com.google.android.gms:play-services-basement:18.4.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/daa46f0fdd16f05f69205eaa668178c9/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:20-65
+94            android:value="@integer/google_play_services_version" />
+94-->[com.google.android.gms:play-services-basement:18.4.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/daa46f0fdd16f05f69205eaa668178c9/transformed/jetified-play-services-basement-18.4.0/AndroidManifest.xml:6:66-119
+95
+96        <uses-library
+96-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+97            android:name="androidx.window.extensions"
+97-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+98            android:required="false" />
+98-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+99        <uses-library
+99-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+100            android:name="androidx.window.sidecar"
+100-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+101            android:required="false" />
+101-->[androidx.window:window:1.2.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/aed2861b2b6894f7067df3f3f96b791f/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+102
+103        <provider
+103-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+104            android:name="androidx.startup.InitializationProvider"
+104-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
+105            android:authorities="com.example.milkshop_driver.androidx-startup"
+105-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
+106            android:exported="false" >
+106-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37
+107            <meta-data
+107-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+108                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+108-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+109                android:value="androidx.startup" />
+109-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/dreamworld/.gradle/caches/8.10.2/transforms/bb10008c4b33ee9597583412a41828ed/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+110            <meta-data
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+111                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+112                android:value="androidx.startup" />
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+113        </provider>
+114
+115        <receiver
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+116            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+117            android:directBootAware="false"
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+118            android:enabled="true"
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+119            android:exported="true"
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+120            android:permission="android.permission.DUMP" >
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+121            <intent-filter>
+121-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+122                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+123            </intent-filter>
+124            <intent-filter>
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+125                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+126            </intent-filter>
+127            <intent-filter>
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+128                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+129            </intent-filter>
+130            <intent-filter>
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+131                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/dreamworld/.gradle/caches/8.10.2/transforms/5aacd87baa6feaa7bece87b01e7698f0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+132            </intent-filter>
+133        </receiver>
+134    </application>
+135
+136</manifest>
