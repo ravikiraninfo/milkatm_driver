@@ -8,7 +8,7 @@ import 'package:milkshop_driver/common/common_textfield.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import 'package:milkshop_driver/utils/app_text_style.dart';
 
-import '../dashboard_page/dashboard_page.dart';
+import 'otp_verification_screen.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -54,6 +54,12 @@ class _LoginPageState extends State<LoginPage> {
                   validator: (val) {
                     if (val == null || val.isEmpty) {
                       return 'Please enter mobile number';
+                    } else if (val.length < 10) {
+                      return 'Please enter valid mobile number';
+                    } else if (val.length > 10) {
+                      return 'Please enter valid mobile number';
+                    }else if(!RegExp(r'^[0-9]+$').hasMatch(val)){
+                      return 'Please enter valid mobile number';
                     }
                     return null;
                   },
@@ -62,27 +68,15 @@ class _LoginPageState extends State<LoginPage> {
               h(20),
               Padding(
                 padding:  EdgeInsets.symmetric(horizontal: 20.w),
-                child: CustomTextInput(
-                  textEditController: loginController.passwordController,
-                  hintTextString: 'Password',
-                  inputType: InputType.password,
-                  borderColor: AppColor.greyColor,
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              h(40),
-              Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 20.w),
                 child: CustomFilledButton(
                     height: 50.h,
-                    onPressed: (){
-                      Get.to(()=>DashboardPage());
-                    }, title: "Login",
+                    onPressed: () {
+                      if (loginController.loginFormKey.currentState!
+                          .validate()) {
+                        loginController.sendOtp();
+                      }
+                    },
+                  title: "Login",
                 ),
               ),
               h(20),

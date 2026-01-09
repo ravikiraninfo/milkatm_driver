@@ -64,7 +64,7 @@ class CustomSnackBar {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
-      fontAsset: 'assets/fonts/Roboto-Regular.ttf',
+      fontAsset: 'assets/fonts/Outfit-Regular.ttf',
       backgroundColor: AppColor.whiteColor,
       textColor: textColor ?? AppColor.blackColor,
       fontSize: 14.sp,

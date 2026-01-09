@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500929236066",
+    "project_id": "milk-atm",
+    "storage_bucket": "milk-atm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500929236066:android:438d31ca312145df15153b",
+        "android_client_info": {
+          "package_name": "com.shop.milk_driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSv-YHKdMh5DIbcgYmNlihiS2eTexnhgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

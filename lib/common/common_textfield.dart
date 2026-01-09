@@ -84,7 +84,7 @@ class CustomTextInput extends StatefulWidget {
 }
 
 class _CustomTextInputState extends State<CustomTextInput> {
-  bool _isValidate = true;
+  final bool _isValidate = true;
   String validationMessage = '';
   bool visibility = false;
   int oldTextSize = 0;
@@ -186,33 +186,6 @@ class _CustomTextInputState extends State<CustomTextInput> {
     return TextStyle(
         color: AppColor.greyColor,
     );
-  }
-
-  void checkValidation(String textFieldValue) {
-    if (widget.inputType == InputType.defaults) {
-      //default
-      _isValidate = textFieldValue.isNotEmpty;
-      validationMessage = widget.errorMessage ?? 'Filed cannot be empty';
-    } else if (widget.inputType == InputType.email) {
-      //email validation
-      _isValidate = RegExp(
-              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-          .hasMatch(textFieldValue);
-      validationMessage = widget.errorMessage ?? 'Email is not valid';
-    } else if (widget.inputType == InputType.number) {
-      //contact number validation
-      _isValidate = textFieldValue.length == widget.maxLength;
-      validationMessage = widget.errorMessage ?? 'Contact Number is not valid';
-    } else if (widget.inputType == InputType.password) {
-      //password validation
-      _isValidate = RegExp(
-              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-          .hasMatch(textFieldValue);
-      validationMessage = widget.errorMessage ?? 'Password is not valid';
-    }
-    oldTextSize = textFieldValue.length;
-    //change value in state
-    setState(() {});
   }
 
   // return input type for setting keyboard

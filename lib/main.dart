@@ -1,20 +1,27 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:milkshop_driver/app/login_page/login_page.dart';
+import 'package:milkshop_driver/app/splash_page/splash_page.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import 'package:milkshop_driver/utils/app_text_style.dart';
 import 'common/common_flex.dart';
 import 'data/local/shared_preference/shared_preference.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+
+import 'firebase_options.dart';
 bool _isConnectivityDialogOpen = false;
 
 Future<void> main() async {
 
   Get.testMode = true;
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await MySharedPref.init();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColor.primaryColor,
@@ -91,7 +98,7 @@ Future<void> main() async {
           useInheritedMediaQuery: true,
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
-          home: LoginPage(),
+          home: SplashPage(),
         );
       },
     ),

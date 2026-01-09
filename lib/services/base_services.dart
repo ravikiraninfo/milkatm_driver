@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' as g;
 import 'package:milkshop_driver/services/print_api_name_and_response.dart';
 import '../common/common_snackbar.dart';
+import '../data/local/shared_preference/shared_preference.dart';
+import '../data/local/shared_preference/shared_preference_key.dart';
 
 class BaseService {
-  String? token= "";
+  String? token= MySharedPref.getString(PreferenceKey.token);
   Dio getDio() {
     Dio dio = Dio();
 

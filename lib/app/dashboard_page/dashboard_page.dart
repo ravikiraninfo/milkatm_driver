@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:milkshop_driver/app/attendance_page/attendance_page.dart';
 import 'package:milkshop_driver/app/home_page/homepage.dart';
 import 'package:milkshop_driver/app/order_page/order_page.dart';
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference.dart';
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference_key.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import 'package:milkshop_driver/utils/app_text_style.dart';
 
+import '../../common/common_snackbar.dart';
 import '../walkin_order_page/walkin_order_page.dart';
 
-
+DateTime? currentBackPressTime;
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -17,7 +21,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _currentIndex = 0;
+  int _currentIndex = 3;
 
   final List<Widget> _pages = [
     Homepage(),
@@ -28,7 +32,25 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, dynamic result) {
+            if (didPop) {
+              return;
+            }
+            DateTime now = DateTime.now();
+            if (currentBackPressTime == null ||
+                now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+              currentBackPressTime = now;
+              CustomSnackBar.showToast(
+                context,
+                messages: 'Press back again to exit',
+              );
+              return;
+            }
+            SystemNavigator.pop();
+          },
+          child: _pages[_currentIndex]),
       bottomNavigationBar: Container(height: 70.h,
         decoration: BoxDecoration(
           // border: Border(
@@ -48,9 +70,14 @@ class _DashboardPageState extends State<DashboardPage> {
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
+            if(MySharedPref.getBool(PreferenceKey.dayStart)==true){
+              setState(() {
+                _currentIndex = index;
+              });
+            }else{
+              CustomSnackBar.showToast(context, messages: 'Please start your day first');
+            }
+
           },
           type: BottomNavigationBarType.fixed,
           elevation: 10,
