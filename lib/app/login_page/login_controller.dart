@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -152,6 +154,7 @@ class LoginController extends GetxController {
       );
 
       if (response?.statusCode == 200) {
+        log(response?.data);
         await _persistAuthTokens(response?.data);
         _closeLoader();
         CustomSnackBar.showToast(
@@ -184,13 +187,9 @@ class LoginController extends GetxController {
     }
 
     final String? accessToken = _extractToken(data);
-    final String? refreshToken = _extractRefreshToken(data);
 
     if (accessToken != null && accessToken.isNotEmpty) {
       await MySharedPref.setString(PreferenceKey.token, accessToken);
-    }
-    if (refreshToken != null && refreshToken.isNotEmpty) {
-      await MySharedPref.setString(PreferenceKey.refreshToken, refreshToken);
     }
     await MySharedPref.setBool(PreferenceKey.isLogin, true);
   }
@@ -198,27 +197,6 @@ class LoginController extends GetxController {
   String? _extractToken(Map<dynamic, dynamic> data) {
     if (data['token'] is String) {
       return data['token'] as String;
-    }
-    final dynamic nestedData = data['data'];
-    if (nestedData is Map && nestedData['tokens'] is Map) {
-      final dynamic token = nestedData['tokens']['accessToken'];
-      if (token is String) {
-        return token;
-      }
-    }
-    return null;
-  }
-
-  String? _extractRefreshToken(Map<dynamic, dynamic> data) {
-    if (data['refreshToken'] is String) {
-      return data['refreshToken'] as String;
-    }
-    final dynamic nestedData = data['data'];
-    if (nestedData is Map && nestedData['tokens'] is Map) {
-      final dynamic token = nestedData['tokens']['refreshToken'];
-      if (token is String) {
-        return token;
-      }
     }
     return null;
   }

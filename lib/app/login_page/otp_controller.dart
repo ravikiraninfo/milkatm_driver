@@ -35,8 +35,6 @@ class OtpController extends GetxController {
 
   @override
   void onClose() {
-    otpTextController.clear();
-    otpTextController.dispose();
     super.onClose();
   }
 
@@ -204,6 +202,7 @@ class OtpController extends GetxController {
           context,
           messages: 'Login successful',
         );
+        MySharedPref.setString(PreferenceKey.driverID, response?.data['user']['_id'].toString() ?? '');
         Get.offAll(() => const DashboardPage());
       } else {
         _closeLoader();

@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:milkshop_driver/common/common_flex.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import '../../common/common_buttons.dart';
+import '../../data/local/shared_preference/shared_preference.dart';
+import '../../data/local/shared_preference/shared_preference_key.dart';
 import '../../utils/app_text_style.dart';
 import '../refile_van_page/refile_van_page.dart';
 import 'package:intl/intl.dart';
@@ -103,6 +105,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       child: CustomFilledButton(
                         height: 50.h,
                         onPressed: (){
+                          // controller.startDay();
                           Get.to(()=>const RefileVanPage());
                         }, title: "Start Day",
                       ),

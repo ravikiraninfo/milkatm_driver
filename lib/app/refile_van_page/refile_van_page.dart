@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:milkshop_driver/app/refile_van_page/refill_page_controller.dart';
 
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import '../route_map_page/route_map_page.dart';
 
 class RefileVanPage extends StatefulWidget {
   const RefileVanPage({super.key});
@@ -15,6 +17,7 @@ class RefileVanPage extends StatefulWidget {
 }
 
 class _RefileVanPageState extends State<RefileVanPage> {
+  RefillPageController controller = Get.put(RefillPageController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,14 +36,20 @@ class _RefileVanPageState extends State<RefileVanPage> {
                       },
                       child: Image.asset('assets/images/back.png',height: 34.h,width: 34.h,)),
                   w(10),
-                  Text('Refile Van',style: AppTextStyle.medium20(AppColor.whiteColor),),
+                  Text('Refill Van',style: AppTextStyle.medium20(AppColor.whiteColor),),
                   spacer(),
                   Image.asset('assets/images/notification.png',height: 20.h,width: 20 .h,),
                 ],
               ),
             ),
             Expanded(
-              child: Container(
+              child: Obx(()=>controller.isLoading.value?
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.primaryColor,
+                    ),
+                  )
+                  :Container(
                 width: double.infinity,
                 color: AppColor.whiteColor,
                 alignment: Alignment.center,
@@ -48,7 +57,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     spacer(),
-                    Text('300 ltr',style: AppTextStyle.medium48(AppColor.blackColor),),
+                    Text('${controller.vanDetails.value.totalCapacity??0} ltr',style: AppTextStyle.medium48(AppColor.blackColor),),
                     h(4),
                     Text('Total Milk In Tank',style: AppTextStyle.medium24(AppColor.blackColor),textAlign: TextAlign.center,),
                     h(50),
@@ -66,7 +75,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                               children: [
                                 Image.asset('assets/images/subscribed.png',height: 62.h,width: 62.h,),
                                 h(10),
-                                Text('200 ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
+                                Text('${controller.vanDetails.value.subscriptionMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
                                 Text('Subscribed Milk',style: AppTextStyle.medium16(AppColor.blackAccentColor),),
                               ],
                             ),
@@ -84,7 +93,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                               children: [
                                 Image.asset('assets/images/milk.png',height: 62.h,width: 62.h,),
                                 h(10),
-                                Text('100 ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
+                                Text('${controller.vanDetails.value.surplusMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
                                 Text('Surplus Milk',style: AppTextStyle.medium16(AppColor.blackAccentColor),),
                               ],
                             ),
@@ -99,13 +108,15 @@ class _RefileVanPageState extends State<RefileVanPage> {
                       child: CustomFilledButton(
                         height: 50.h,
                         onPressed: (){
+                          Get.to(()=>const RouteMapPage());
+
                         }, title: "Start Route",
                       ),
                     ),
                     h(30),
                   ],
                 ),
-              ),
+              ),),
             ),
           ],
         ),
