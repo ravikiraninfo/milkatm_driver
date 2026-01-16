@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:milkshop_driver/app/attendance_page/attendance_page.dart';
 import 'package:milkshop_driver/app/home_page/homepage.dart';
 import 'package:milkshop_driver/app/order_page/order_page.dart';
 import 'package:milkshop_driver/data/local/shared_preference/shared_preference.dart';
 import 'package:milkshop_driver/data/local/shared_preference/shared_preference_key.dart';
+import 'package:milkshop_driver/global/global.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import 'package:milkshop_driver/utils/app_text_style.dart';
 
@@ -21,7 +23,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _currentIndex = 3;
 
   final List<Widget> _pages = [
     Homepage(),
@@ -31,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(()=>Scaffold(
       body: PopScope(
           canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) {
@@ -50,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
             }
             SystemNavigator.pop();
           },
-          child: _pages[_currentIndex]),
+          child: _pages[Global.currentIndex.value]),
       bottomNavigationBar: Container(height: 70.h,
         decoration: BoxDecoration(
           // border: Border(
@@ -68,16 +69,13 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
         child: BottomNavigationBar(
-          currentIndex: _currentIndex,
+          currentIndex: Global.currentIndex.value,
           onTap: (index) {
-            if(MySharedPref.getBool(PreferenceKey.dayStart)==true){
-              setState(() {
-                _currentIndex = index;
-              });
+            if(Global.dayStarted.value==true){
+              Global.currentIndex.value = index;
             }else{
               CustomSnackBar.showToast(context, messages: 'Please start your day first');
             }
-
           },
           type: BottomNavigationBarType.fixed,
           elevation: 10,
@@ -93,14 +91,14 @@ class _DashboardPageState extends State<DashboardPage> {
               padding: EdgeInsets.all(10.h),
               child: Image.asset("assets/images/home.png",height: 18.h,width: 18.h,),
             ), label: 'Home',
-            activeIcon: Container(
-              decoration: BoxDecoration(
-               shape: BoxShape.circle,
-                color: AppColor.primaryColor,
-              ),
-              padding: EdgeInsets.all(10.h),
-              child: Image.asset("assets/images/home.png",height: 18.h,width: 18.h,color: AppColor.whiteColor,),
-            )
+                activeIcon: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.primaryColor,
+                  ),
+                  padding: EdgeInsets.all(10.h),
+                  child: Image.asset("assets/images/home.png",height: 18.h,width: 18.h,color: AppColor.whiteColor,),
+                )
             ),
             BottomNavigationBarItem(icon: Padding(
               padding: EdgeInsets.all(10.h),
@@ -139,6 +137,6 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
 
-    );
+    ),);
   }
 }

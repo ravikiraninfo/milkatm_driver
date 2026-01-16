@@ -15,7 +15,7 @@ class RefillPageController extends GetxController {
     d.Response? response = await BaseService().get(ApiUrl.vanRoutes(MySharedPref.getString(PreferenceKey.driverID)));
     if (response?.statusCode == 200) {
       isLoading.value = false;
-      vanDetails.value = VanDetails.fromJson(response!.data[0]);
+      vanDetails.value = VanDetails.fromJson(response!.data);
       return response;
     }else{
       isLoading.value = false;

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:milkshop_driver/app/customer_detail_page/customer_detail_page.dart';
 import 'package:milkshop_driver/common/common_textfield.dart';
 
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import '../refile_van_page/refill_page_model.dart';
 import 'customer_list_view_controller.dart';
 
 
@@ -18,44 +20,19 @@ class CustomerListViewPage extends StatefulWidget {
 }
 
 class _CustomerListViewPageState extends State<CustomerListViewPage> {
-  final List<_OrderSummary> _orders = const <_OrderSummary>[
-    _OrderSummary(
-      id: '#16122025TUE',
-      customerName: 'Jogindar Mistry',
-      quantity: '1ltr',
-      amount: '₹30',
-      statusLabel: 'Delivered',
-      statusColor: Color(0xFF4CAF50),
-      deliveryTime: '1 Dec 2025, 7:00AM',
-    ),
-    _OrderSummary(
-      id: '#16122025TUE',
-      customerName: 'Jogindar Mistry',
-      quantity: '1ltr',
-      amount: '₹30',
-      statusLabel: 'Delivered',
-      statusColor: Color(0xFF4CAF50),
-      deliveryTime: '1 Dec 2025, 7:00AM',
-    ),
-    _OrderSummary(
-      id: '#16122025TUE',
-      customerName: 'Jogindar Mistry',
-      quantity: '1ltr',
-      amount: '₹30',
-      statusLabel: 'Delivered',
-      statusColor: Color(0xFFFFC107),
-      deliveryTime: '1 Dec 2025, 7:00AM',
-    ),
-    _OrderSummary(
-      id: '#16122025TUE',
-      customerName: 'Jogindar Mistry',
-      quantity: '1ltr',
-      amount: '₹30',
-      statusLabel: 'Delivered',
-      statusColor: Color(0xFFF44336),
-      deliveryTime: '1 Dec 2025, 7:00AM',
-    ),
-  ];
+  List<User> _resolveUsers(dynamic args) {
+    if (args is List<User>) {
+      return args;
+    }
+    if (args is List) {
+      return args
+          .map((user) => user is User
+          ? user
+          : User.fromJson(Map<String, dynamic>.from(user as Map)))
+          .toList();
+    }
+    return <User>[];
+  }
 
   late final CustomerListViewController _controller;
 
@@ -63,6 +40,8 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
   void initState() {
     super.initState();
     _controller = Get.put(CustomerListViewController());
+    final List<User> initialUsers = _resolveUsers(Get.arguments);
+    _controller.setUsers(initialUsers);
   }
 
   @override
@@ -74,6 +53,7 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
   }
 
   void _openFilterSheet() {
+    _controller.beginFilterSelection();
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColor.whiteColor,
@@ -106,11 +86,11 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
                   return Column(
                     children: List<Widget>.generate(options.length, (int index) {
                       final String option = options[index];
-                      final bool isSelected = controller.selectedFilter.value == option;
+                      final bool isSelected = controller.draftFilter.value == option;
                       return Column(
                         children: <Widget>[
                           InkWell(
-                            onTap: () => controller.selectFilter(option),
+                            onTap: () => controller.selectFilterOption(option),
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 12.h),
                               child: Row(
@@ -138,7 +118,10 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
                 SizedBox(
                   height: 50.h,
                   child: CustomFilledButton(
-                    onPressed: Get.back,
+                    onPressed: () {
+                      controller.applyDraftFilter();
+                      Get.back();
+                    },
                     title: 'Apply Filter',
                     backgroundColor: AppColor.primaryColor,
                   ),
@@ -161,7 +144,7 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
             Container(
               width: double.infinity,
               color: AppColor.primaryColor,
-              padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 14.h),
               child: Row(
                 children: [
                   InkWell(
@@ -176,31 +159,141 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
                 ],
               ),
             ),
-            Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 16.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Obx(() => Text(_controller.selectedFilter.value, style: AppTextStyle.regular17(AppColor.blackColor))),
-                  w(12),
-                  InkWell(
+            Obx(() {
+              if (!_controller.hasUsers) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(_controller.selectedFilter.value, style: AppTextStyle.regular17(AppColor.blackColor)),
+                    w(12),
+                    InkWell(
                       onTap: _openFilterSheet,
-                      child: Image.asset('assets/images/filter.png',height: 20.h,width: 20.h,)),
-                ],
-              ),
-            ),
+                      child: Image.asset('assets/images/filter.png', height: 20.h, width: 20.h),
+                    ),
+                  ],
+                ),
+              );
+            }),
 
             h(10),
             Expanded(
-              child: ListView.builder(
-                  itemCount: _orders.length,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context,i){
-                    return Padding(
+              child: Obx(() {
+                if (!_controller.hasUsers) {
+                  return Center(
+                    child: Text(
+                      "No Customers Available",
+                      style: AppTextStyle.medium16(AppColor.blackColor),
+                    ),
+                  );
+                }
+
+                if (_controller.filteredUsers.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No customers match the selected filter",
+                      style: AppTextStyle.medium16(AppColor.blackColor),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                    itemCount: _controller.filteredUsers.length,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context,i){
+                      final user = _controller.filteredUsers[i];
+                      return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 10.h),
-                      child: _OrderCard(_orders[i]),
+                      child:  InkWell(
+                        onTap: (){
+                          Get.to(()=> const CustomerDetailPage(),arguments: user);
+                        },
+                        child: Ink(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFEFEFE),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE8F1FF),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Image.asset("assets/images/milk_image.png"),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              user.fullName??'--',
+                                              style:AppTextStyle.medium16(AppColor.blackAccentColor),
+                                            ),
+                                            spacer(),
+                                            Container(
+                                              height: 24.h,
+                                              width: 24.h,
+                                              decoration: BoxDecoration(
+                                                color:user.orderId?.status=="delivered"? AppColor.greenColor:user.orderId?.status=="active"?AppColor.grey50:user.orderId?.status=="pause"?AppColor.yellowColor:user.orderId?.status=="missed"?AppColor.redColor:AppColor.grey50,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child:user.orderId?.status!="active"?const Icon(
+                                                Icons.check,
+                                                size: 14,
+                                                color: Colors.white,
+                                              ):const SizedBox.shrink(),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Row(
+                                      children: <Widget>[
+                                        _OrderMetric(title: 'Qty', value: "${user.liter??0}ltr"),
+                                        const SizedBox(width: 14),
+                                        _OrderMetric(title: 'Amount', value:"₹0"),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Delivery Type:",
+                                          style: AppTextStyle.medium14( AppColor.blackAccentColor),
+                                        ),
+                                        w(4),
+                                        Text(
+                                          user.orderId?.deliveryType?.name??"-",
+                                          style: AppTextStyle.medium16( AppColor.blackColor),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
-                  }),
+                  });
+              }),
             ),
           ],
         ),
@@ -209,119 +302,14 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
   }
 }
 
-class _OrderSummary {
-  const _OrderSummary({
-    required this.id,
-    required this.customerName,
-    required this.quantity,
-    required this.amount,
-    required this.statusLabel,
-    required this.statusColor,
-    required this.deliveryTime,
-  });
 
-  final String id;
-  final String customerName;
-  final String quantity;
-  final String amount;
-  final String statusLabel;
-  final Color statusColor;
-  final String deliveryTime;
-}
 
-class _OrderCard extends StatelessWidget {
-  const _OrderCard(this.summary);
-
-  final _OrderSummary summary;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFEFEFE),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            height: 70,
-            width: 70,
-            decoration: BoxDecoration(
-              color: const Color(0xFFE8F1FF),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Image.asset("assets/images/milk_image.png"),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          summary.customerName,
-                          style:AppTextStyle.medium16(AppColor.blackAccentColor),
-                        ),
-                        spacer(),
-                        Container(
-                          height: 24.h,
-                          width: 24.h,
-                          decoration: BoxDecoration(
-                            color: summary.statusColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.check,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    _OrderMetric(title: 'Qty', value: summary.quantity),
-                    const SizedBox(width: 14),
-                    _OrderMetric(title: 'Amount', value: summary.amount),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Row(
-                  children: [
-                    Text(
-                      "Subscription Plan :",
-                      style: AppTextStyle.medium14( AppColor.blackAccentColor),
-                    ),
-                    w(4),
-                    Text(
-                      "Expired",
-                      style: AppTextStyle.medium16( AppColor.redColor),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _OrderMetric extends StatelessWidget {
   const _OrderMetric({required this.title, required this.value});
 
   final String title;
-  final String value;
+  final  dynamic value;
 
   @override
   Widget build(BuildContext context) {
@@ -334,7 +322,7 @@ class _OrderMetric extends StatelessWidget {
         ),
         w(4),
         Text(
-          value,
+          "$value",
           style: AppTextStyle.medium16( AppColor.blackColor),
         ),
       ],

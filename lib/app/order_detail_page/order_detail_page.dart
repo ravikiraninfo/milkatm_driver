@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import '../order_page/order_page_model.dart';
 
 class OrderDetailPage extends StatefulWidget {
   const OrderDetailPage({super.key});
@@ -15,6 +17,12 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
+   late final Datum order;
+   @override
+  void initState() {
+    order = Get.arguments as Datum;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,38 +140,40 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                             h(4),
                             Text(
-                              '#16122025TUE',
+                              '#${order.orderNumber??'-'}',
                               style: AppTextStyle.medium24(AppColor.blackColor),
                             ),
                             h(12),
                             Text(
-                              'Shrikant Gadkar',
+                          order.name??'-',
                               style: AppTextStyle.medium20(AppColor.blackColor),
                             ),
                             h(8),
                             Text(
-                              '+91 XXXX XXXX XX',
+                              '+91 ${order.mobile??'-'}',
                               style: AppTextStyle.regular14(AppColor.blackColor),
                             ),
                             h(12),
                             Text(
-                              'Flat No. 57, IOC Rd, opposite Hanumanji Mandir, Akash Ganga Society, Chandkheda, Ahmedabad, Gujarat 382424',
+                              order.address?.address??'-',
                               style: AppTextStyle.regular16(AppColor.blackColor),
                             ),
                             h(26),
                             _DetailRow(
-                              items: const [
-                                _DetailItem(title: 'Quantity', value: '1 ltr'),
-                                _DetailItem(title: 'Amount', value: '₹55'),
-                                _DetailItem(title: 'Milk Type', value: 'Toned Loose Milk'),
+                              items:  [
+                                _DetailItem(title: 'Quantity', value: "${order.liter??0} ltr"),
+                                _DetailItem(title: 'Amount', value: "₹ ${order.price??0}"),
+                                _DetailItem(title: 'Milk Type', value: '${order.milkType?.name}'),
                               ],
                             ),
                             h(18),
                             _DetailRow(
-                              items: const [
-                                _DetailItem(title: 'Delivery Time', value: 'Morning'),
-                                _DetailItem(title: 'Delivery Type', value: 'Self Pickup'),
-                                _DetailItem(title: 'Frequency', value: 'Daily'),
+                              items:  [
+                                _DetailItem(title: 'Delivery Time', value: order.orderDate != null
+                                    ? DateFormat('d MMM, y').format(DateTime.parse(order.orderDate!.toString()))
+                                    : '--',),
+                                _DetailItem(title: 'Delivery Type', value: '${order.deliveryType?.name}'),
+                                _DetailItem(title: 'Frequency', value: '${order.frequency}'),
                               ],
                             ),
                             h(28),

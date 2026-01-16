@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../common/common_buttons.dart';
+import 'package:intl/intl.dart';
+import 'package:milkshop_driver/app/walkin_new_order/walkin_new_order.dart';
 import '../../common/common_flex.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import 'package:dio/dio.dart' as d;
+import 'package:milkshop_driver/app/refile_van_page/refill_page_model.dart';
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference.dart';
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference_key.dart';
+import '../../api/api_url.dart';
+import '../../common/common_snackbar.dart';
+import '../../services/base_services.dart';
 
 class WalkinOrderPage extends StatefulWidget {
   const WalkinOrderPage({super.key});
@@ -15,16 +22,43 @@ class WalkinOrderPage extends StatefulWidget {
 }
 
 class _WalkinOrderPageState extends State<WalkinOrderPage> {
+  Rx<VanDetails> vanDetails = VanDetails().obs;
+
+  RxBool isLoading = false.obs;
+  Future<d.Response?> startRoute()async{
+    isLoading.value = true;
+    d.Response? response = await BaseService().get(ApiUrl.vanRoutes(MySharedPref.getString(PreferenceKey.driverID)));
+    if (response?.statusCode == 200) {
+      isLoading.value = false;
+      vanDetails.value = VanDetails.fromJson(response!.data);
+      return response;
+    }else{
+      isLoading.value = false;
+      CustomSnackBar.showToast(
+        Get.context!,
+        messages:response?.data['message'] ?? "Something went wrong",
+      );
+    }
+    return null;
+  }
+  @override
+  void initState() {
+    startRoute();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: Obx(()=>isLoading.value?Center(
+        child: CircularProgressIndicator(
+          color: AppColor.primaryColor,
+        ),
+      ):SafeArea(
         child: Container(
           width: double.infinity,
           color: AppColor.lightGreyColor,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            // padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,9 +76,8 @@ class _WalkinOrderPageState extends State<WalkinOrderPage> {
                         'In Stock Milk :',
                         style: AppTextStyle.medium18(AppColor.blackColor),
                       ),
-
-                      _StockTile(label: 'Subscribed Milk', value: '10 ltr'),
-                      _StockTile(label: 'Surplus Milk', value: '10 ltr'),
+                      _StockTile(label: 'Subscribed Milk', value: '${vanDetails.value.data?[0].subscriptionMilkLiter??0} ltr'),
+                      _StockTile(label: 'Surplus Milk', value: '${vanDetails.value.data?[0].surplusMilkLiter??0} ltr'),
                     ],
                   ),
                 ),
@@ -77,11 +110,14 @@ class _WalkinOrderPageState extends State<WalkinOrderPage> {
                       ),
                       h(20),
                       Text(
-                        '₹220',
+                        '₹ ${vanDetails.value.data?[0].walletBalance??0}',
                         style: AppTextStyle.bold50(AppColor.whiteColor),
                       ),
                       h(10),
                       InkWell(
+                        onTap: (){
+                          Get.to(()=>const WalkinNewOrder());
+                        },
                         child: Container(
                           width: double.infinity,
                           height: 56.h,
@@ -105,12 +141,66 @@ class _WalkinOrderPageState extends State<WalkinOrderPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: ListView.separated(
-                    itemCount: 4,
+                    itemCount: vanDetails.value.data?[0].walkInOrders?.length??0,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (_, __) => h(16),
                     itemBuilder: (context, index) {
-                      return const _OrderTile();
+                      final order = vanDetails.value.data?[0].walkInOrders?[index];
+                      return Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
+                        decoration: BoxDecoration(
+                          color: AppColor.whiteColor,
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 50.h,
+                              width: 50.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.r),
+                                border: Border.all(color: AppColor.lightGreyColor),
+                              ),
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                'assets/images/credited.png',
+                                height: 20.h,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            w(12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Order amount credited',
+                                    style: AppTextStyle.medium16(AppColor.blackColor),
+                                  ),
+                                  h(6),
+                                  Text(
+                                    '#${order?.orderNumber??""}',
+                                    style: AppTextStyle.regular12(AppColor.blackAccentColor),
+                                  ),
+                                  h(6),
+                                  Text(
+                                    order?.createdAt != null ? DateFormat('dd MMM yyyy, hh:mm a').format(order!.createdAt!) : "",
+                                    style: AppTextStyle.regular12(AppColor.blackAccentColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            w(12),
+                            Text(
+                              '₹${order?.amount??0}',
+                              style: AppTextStyle.medium16(AppColor.greenColor),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -119,7 +209,7 @@ class _WalkinOrderPageState extends State<WalkinOrderPage> {
             ),
           ),
         ),
-      ),
+      ),),
     );
   }
 }
@@ -149,72 +239,4 @@ class _StockTile extends StatelessWidget {
   }
 }
 
-class _OrderTile extends StatelessWidget {
-  const _OrderTile();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.blackColor.withOpacity(0.05),
-            blurRadius: 20.r,
-            offset: Offset(0, 8.h),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: 50.h,
-            width: 50.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.r),
-              border: Border.all(color: AppColor.lightGreyColor),
-            ),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/images/credited.png',
-              height: 20.h,
-              fit: BoxFit.contain,
-            ),
-          ),
-          w(12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Order amount credited',
-                  style: AppTextStyle.medium16(AppColor.blackColor),
-                ),
-                h(6),
-                Text(
-                  '#12122025FRI',
-                  style: AppTextStyle.regular12(AppColor.blackAccentColor),
-                ),
-                h(6),
-                Text(
-                  '16 Dec 2025, 10:55 PM',
-                  style: AppTextStyle.regular12(AppColor.blackAccentColor),
-                ),
-              ],
-            ),
-          ),
-          w(12),
-          Text(
-            '₹55',
-            style: AppTextStyle.medium16(AppColor.greenColor),
-          ),
-        ],
-      ),
-    );
-  }
-}
 

@@ -5,6 +5,7 @@ import 'package:milkshop_driver/app/refile_van_page/refill_page_controller.dart'
 
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
+import '../../global/global.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
 import '../route_map_page/route_map_page.dart';
@@ -57,7 +58,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     spacer(),
-                    Text('${controller.vanDetails.value.totalCapacity??0} ltr',style: AppTextStyle.medium48(AppColor.blackColor),),
+                    Text('${controller.vanDetails.value.data?[0].totalCapacity??0} ltr',style: AppTextStyle.medium48(AppColor.blackColor),),
                     h(4),
                     Text('Total Milk In Tank',style: AppTextStyle.medium24(AppColor.blackColor),textAlign: TextAlign.center,),
                     h(50),
@@ -75,7 +76,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                               children: [
                                 Image.asset('assets/images/subscribed.png',height: 62.h,width: 62.h,),
                                 h(10),
-                                Text('${controller.vanDetails.value.subscriptionMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
+                                Text('${controller.vanDetails.value.data?[0].subscriptionMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
                                 Text('Subscribed Milk',style: AppTextStyle.medium16(AppColor.blackAccentColor),),
                               ],
                             ),
@@ -93,7 +94,7 @@ class _RefileVanPageState extends State<RefileVanPage> {
                               children: [
                                 Image.asset('assets/images/milk.png',height: 62.h,width: 62.h,),
                                 h(10),
-                                Text('${controller.vanDetails.value.surplusMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
+                                Text('${controller.vanDetails.value.data?[0].surplusMilkLiter??0} ltr',style: AppTextStyle.medium32(AppColor.blackColor),),
                                 Text('Surplus Milk',style: AppTextStyle.medium16(AppColor.blackAccentColor),),
                               ],
                             ),
@@ -108,8 +109,9 @@ class _RefileVanPageState extends State<RefileVanPage> {
                       child: CustomFilledButton(
                         height: 50.h,
                         onPressed: (){
-                          Get.to(()=>const RouteMapPage());
-
+                          Get.back();
+                          Global.currentIndex.value = 0;
+                          // Get.to(()=>const RouteMapPage(),arguments: controller.vanDetails.value.data?[0].route?.pickupPoints??[]);
                         }, title: "Start Route",
                       ),
                     ),

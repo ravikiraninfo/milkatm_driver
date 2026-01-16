@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import '../refile_van_page/refill_page_model.dart';
 
 class CustomerDetailPage extends StatefulWidget {
   const CustomerDetailPage({super.key});
@@ -15,6 +17,13 @@ class CustomerDetailPage extends StatefulWidget {
 }
 
 class _CustomerDetailPageState extends State<CustomerDetailPage> {
+  late User user;
+
+  @override
+  void initState() {
+    user = Get.arguments;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,17 +76,17 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Shrikant Gadkar',
+                              user.fullName??'--',
                               style: AppTextStyle.medium20(AppColor.blackColor),
                             ),
                             h(8),
                             Text(
-                              '+91 XXXX XXXX XX',
+                              '+91 ${user.mobile??'--'}',
                               style: AppTextStyle.regular14(AppColor.blackColor),
                             ),
                             h(12),
                             Text(
-                              'Flat No. 57, IOC Rd, opposite Hanumanji Mandir, Akash Ganga Society, Chandkheda, Ahmedabad, Gujarat 382424',
+                              user.orderId?.address?.address??"--",
                               style: AppTextStyle.regular16(AppColor.lightBlackColor1),
                             ),
                             h(20),
@@ -114,18 +123,20 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                             ),
                             h(26),
                             _DetailRow(
-                              items: const [
-                                _DetailItem(title: 'Quantity', value: '1 ltr'),
-                                _DetailItem(title: 'Amount', value: '₹55'),
-                                _DetailItem(title: 'Milk Type', value: 'Toned Loose Milk'),
+                              items:  [
+                                _DetailItem(title: 'Quantity', value: "${user.liter??0} ltr"),
+                                _DetailItem(title: 'Amount', value: "₹ ${user.orderId?.price??0}"),
+                                _DetailItem(title: 'Milk Type', value: '${user.orderId?.milkType?.name}'),
                               ],
                             ),
                             h(18),
                             _DetailRow(
-                              items: const [
-                                _DetailItem(title: 'Delivery Time', value: 'Morning'),
-                                _DetailItem(title: 'Delivery Type', value: 'Self Pickup'),
-                                _DetailItem(title: 'Frequency', value: 'Daily'),
+                              items:  [
+                                _DetailItem(title: 'Delivery Time', value: user.orderId?.orderDate != null
+                                ? DateFormat('d MMM, y').format(DateTime.parse(user.orderId!.orderDate!.toString()))
+                                : '--',),
+                                _DetailItem(title: 'Delivery Type', value: '${user.orderId?.deliveryType?.name}'),
+                                _DetailItem(title: 'Frequency', value: '${user.orderId?.frequency}'),
                               ],
                             ),
                           ],
@@ -175,6 +186,7 @@ class _MetaTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
+          textAlign: TextAlign.center,
           item.title,
           style: AppTextStyle.regular16(AppColor.lightBlackColor),
         ),

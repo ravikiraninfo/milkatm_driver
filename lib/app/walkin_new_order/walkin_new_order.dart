@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:milkshop_driver/app/walkin_new_order/walkin_new_order.dart';
 import '../../common/common_buttons.dart';
-import '../../common/common_textfield.dart';
 import '../../common/common_flex.dart';
+import '../../common/common_textfield.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import 'package:dio/dio.dart' as d;
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference.dart';
+import 'package:milkshop_driver/data/local/shared_preference/shared_preference_key.dart';
+import '../../api/api_url.dart';
+import '../../common/common_snackbar.dart';
+import '../../services/base_services.dart';
 
 class WalkinNewOrder extends StatefulWidget {
   const WalkinNewOrder({super.key});
@@ -18,10 +26,36 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
   final TextEditingController _mobileController =
       TextEditingController(text: '+91 XXXX XXXX XX');
   final TextEditingController _nameController =
-      TextEditingController(text: 'Shrikant Gadkar');
+      TextEditingController();
 
   int _quantity = 1;
-
+  Future<d.Response?> createWalkInOrder()async{
+    CustomSnackBar.showAlertDialog(context);
+    d.Response? response = await BaseService().post(ApiUrl.createWalkInOrder(MySharedPref.getString(PreferenceKey.driverID)),
+        data: {
+          "driverUserId": MySharedPref.getString(PreferenceKey.driverID),
+          "name": _mobileController.text.trim(),
+          "mobile": _nameController.text.trim(),
+          "milkInLiter": _quantity,
+          "milkTypeId": "6953b07ccc26a664c7d565f4"
+        }
+    );
+    if (response?.statusCode == 200) {
+      Get.back();
+      CustomSnackBar.showToast(
+        Get.context!,
+        messages:response?.data['message'] ?? "Something went wrong",
+      );
+      return response;
+    }else{
+      Get.back();
+      CustomSnackBar.showToast(
+        Get.context!,
+        messages:response?.data['message'] ?? "Something went wrong",
+      );
+    }
+    return null;
+  }
   @override
   void dispose() {
     _mobileController.dispose();
@@ -184,7 +218,6 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
                       CustomFilledButton(
                         onPressed: () {},
                         title: 'Proceed to payment',
-
                         backgroundColor: AppColor.primaryColor,
                         style: AppTextStyle.medium18(AppColor.whiteColor),
                         height: 56.h,

@@ -196,13 +196,13 @@ class OtpController extends GetxController {
       );
 
       if (response?.statusCode == 200) {
-        await _persistAuthTokens(response?.data);
+        await _persistAuthTokens(response?.data['data']);
         Get.back();
         CustomSnackBar.showToast(
           context,
           messages: 'Login successful',
         );
-        MySharedPref.setString(PreferenceKey.driverID, response?.data['user']['_id'].toString() ?? '');
+        MySharedPref.setString(PreferenceKey.driverID, response?.data['data']['user']['_id'].toString() ?? '');
         Get.offAll(() => const DashboardPage());
       } else {
         _closeLoader();
