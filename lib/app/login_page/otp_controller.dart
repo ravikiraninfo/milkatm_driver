@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as d;
-
 import '../../api/api_url.dart';
 import '../../common/common_snackbar.dart';
 import '../../data/local/shared_preference/shared_preference.dart';
@@ -203,6 +202,8 @@ class OtpController extends GetxController {
           messages: 'Login successful',
         );
         MySharedPref.setString(PreferenceKey.driverID, response?.data['data']['user']['_id'].toString() ?? '');
+        MySharedPref.setString(PreferenceKey.name, response?.data['data']['user']['fullName'].toString() ?? '');
+        MySharedPref.setString(PreferenceKey.number, response?.data['data']['user']['mobile'].toString() ?? '');
         Get.offAll(() => const DashboardPage());
       } else {
         _closeLoader();
@@ -212,7 +213,6 @@ class OtpController extends GetxController {
         );
       }
     } catch (error) {
-      _closeLoader();
       Get.back();
       if (kDebugMode) {
         debugPrint('Backend login failed: $error');

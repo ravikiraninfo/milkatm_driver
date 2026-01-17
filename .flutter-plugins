@@ -1,4 +1,8 @@
 # This is a generated file; do not edit or check into version control.
+camera=/Users/dreamworld/.pub-cache/hosted/pub.dev/camera-0.11.2+1/
+camera_android_camerax=/Users/dreamworld/.pub-cache/hosted/pub.dev/camera_android_camerax-0.6.19+1/
+camera_avfoundation=/Users/dreamworld/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.21+2/
+camera_web=/Users/dreamworld/.pub-cache/hosted/pub.dev/camera_web-0.3.5/
 connectivity_plus=/Users/dreamworld/.pub-cache/hosted/pub.dev/connectivity_plus-6.1.5/
 firebase_auth=/Users/dreamworld/.pub-cache/hosted/pub.dev/firebase_auth-5.7.0/
 firebase_auth_web=/Users/dreamworld/.pub-cache/hosted/pub.dev/firebase_auth_web-5.15.3/

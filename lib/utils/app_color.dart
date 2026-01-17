@@ -24,6 +24,7 @@ class AppColor {
   static const Color tealColor = Colors.teal;
   static const Color transparentColor = Colors.transparent;
   static const Color grey50 = Color(0xFFD9D9D9);
+  static const Color grey40 = Color(0xFFEDF8FF);
   static const Color grey100 = Color(0xFFF3F4F6);
   static const Color grey200 = Color(0xFFE5E7EB);
   static const Color grey300 = Color(0xFFD1D5DB);

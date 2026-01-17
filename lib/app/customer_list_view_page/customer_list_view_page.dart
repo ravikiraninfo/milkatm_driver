@@ -267,7 +267,7 @@ class _CustomerListViewPageState extends State<CustomerListViewPage> {
                                       children: <Widget>[
                                         _OrderMetric(title: 'Qty', value: "${user.liter??0}ltr"),
                                         const SizedBox(width: 14),
-                                        _OrderMetric(title: 'Amount', value:"₹0"),
+                                        _OrderMetric(title: 'Amount', value:"${user.orderId?.price}"),
                                       ],
                                     ),
                                     SizedBox(height: 8.h),

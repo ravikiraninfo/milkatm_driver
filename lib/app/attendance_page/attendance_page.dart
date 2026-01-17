@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,10 +7,17 @@ import 'package:get/get.dart';
 import 'package:milkshop_driver/common/common_flex.dart';
 import 'package:milkshop_driver/utils/app_color.dart';
 import '../../common/common_buttons.dart';
+import '../../common/common_dialog_box.dart';
+import '../../common/common_divider.dart';
+import '../../common/common_snackbar.dart';
 import '../../data/local/shared_preference/shared_preference.dart';
 import '../../data/local/shared_preference/shared_preference_key.dart';
 import '../../global/global.dart';
 import '../../utils/app_text_style.dart';
+import '../drawer/drawer.dart';
+import '../inventory_stock_page/inventory_stock_page.dart';
+import '../login_page/login_page.dart';
+import '../notification_setting_page/notification_setting_page.dart';
 import '../refile_van_page/refile_van_page.dart';
 import 'package:intl/intl.dart';
 
@@ -23,6 +31,8 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   AttendancePageController controller = Get.put(AttendancePageController());
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   late Timer _timer;
   DateTime _now = DateTime.now();
 
@@ -48,6 +58,8 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: const HomeDrawer(),
       body: SafeArea(
         child: Column(
           children: [
@@ -57,9 +69,13 @@ class _AttendancePageState extends State<AttendancePage> {
               padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 14.h),
               child: Row(
                 children: [
-                  Image.asset('assets/images/woman.png',height: 34.h,width: 34.h,),
+                  InkWell(
+                      onTap: (){
+                        scaffoldKey.currentState?.openDrawer();
+                      },
+                      child: Image.asset('assets/images/woman.png',height: 34.h,width: 34.h,)),
                   w(10),
-                  Text('Dustin Trailblazer',style: AppTextStyle.medium20(AppColor.whiteColor),),
+                  Text(MySharedPref.getString(PreferenceKey.name) ?? '--',style: AppTextStyle.medium20(AppColor.whiteColor),),
                   spacer(),
                   Image.asset('assets/images/notification.png',height: 20.h,width: 20 .h,),
                 ],

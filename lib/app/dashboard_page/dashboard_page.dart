@@ -71,11 +71,11 @@ class _DashboardPageState extends State<DashboardPage> {
         child: BottomNavigationBar(
           currentIndex: Global.currentIndex.value,
           onTap: (index) {
-            if(Global.dayStarted.value==true){
+            // if(Global.dayStarted.value==true){
               Global.currentIndex.value = index;
-            }else{
-              CustomSnackBar.showToast(context, messages: 'Please start your day first');
-            }
+            // }else{
+            //   CustomSnackBar.showToast(context, messages: 'Please start your day first');
+            // }
           },
           type: BottomNavigationBarType.fixed,
           elevation: 10,

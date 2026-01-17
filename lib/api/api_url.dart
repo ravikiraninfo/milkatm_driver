@@ -19,6 +19,9 @@ class ApiUrl {
   static String createWalkInOrder(driverId) {
     return "${domain}vanRoutes/$driverId/walkin-orders";
   }
+  static String gertProfileData(driverId) {
+    return "${domain}users/$driverId/profile";
+  }
   static String allOrders({
     required String driverId,
     required int page,

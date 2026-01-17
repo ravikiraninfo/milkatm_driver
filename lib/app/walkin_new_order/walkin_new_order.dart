@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:milkshop_driver/app/walkin_new_order/walkin_new_order.dart';
+import 'package:milkshop_driver/common/common_divider.dart';
 import '../../common/common_buttons.dart';
 import '../../common/common_flex.dart';
 import '../../common/common_textfield.dart';
@@ -29,6 +30,11 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
       TextEditingController();
 
   int _quantity = 1;
+  final List<int> _amountOptions = <int>[20, 50, 60];
+  int _selectedAmountIndex = 1;
+
+  int get _selectedAmount => _amountOptions[_selectedAmountIndex];
+
   Future<d.Response?> createWalkInOrder()async{
     CustomSnackBar.showAlertDialog(context);
     d.Response? response = await BaseService().post(ApiUrl.createWalkInOrder(MySharedPref.getString(PreferenceKey.driverID)),
@@ -151,6 +157,71 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
                       ),
                       h(30),
                       Row(
+                        children: [
+                          Expanded(child: divider(color: AppColor.greyColor)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: Text(
+                              'Add Milk Quantity',
+                              style: AppTextStyle.medium16(AppColor.greyColor),
+                            ),
+                          ),
+                          Expanded(child: divider(color: AppColor.greyColor)),
+                        ],
+                      ),
+                      h(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Select amount',
+                            style: AppTextStyle.regular16(AppColor.blackColor),
+                          ),
+                          Text(
+                            'Milk in litter',
+                            style: AppTextStyle.regular16(AppColor.blackColor),
+                          ),
+                        ],
+                      ),
+                      h(10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: List<Widget>.generate(_amountOptions.length, (int index) {
+                                final bool isSelected = _selectedAmountIndex == index;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() => _selectedAmountIndex = index);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      right: index == _amountOptions.length - 1 ? 0 : 12.w,
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                                    decoration: BoxDecoration(
+                                      color: isSelected ? AppColor.redColor : AppColor.grey40,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Text(
+                                      '₹ ${_amountOptions[index]}',
+                                      style: AppTextStyle.medium16(
+                                        isSelected ? AppColor.whiteColor : AppColor.blackColor,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                          Text(
+                            '$_quantity ltr',
+                            style: AppTextStyle.regular16(AppColor.blackColor),
+                          ),
+                        ],
+                      ),
+                      h(10),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -158,12 +229,12 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
                             style: AppTextStyle.regular16(AppColor.blackColor),
                           ),
                           Text(
-                            'Milk Type',
+                            'Total Amount',
                             style: AppTextStyle.regular16(AppColor.blackColor),
                           ),
                         ],
                       ),
-                      h(12),
+                      h(4),
                       Row(
                         children: [
                           Container(
@@ -198,19 +269,10 @@ class _WalkinNewOrderState extends State<WalkinNewOrder> {
                               ],
                             ),
                           ),
-                          w(20),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF6F6F6),
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              child: Text(
-                                'Toned Loose Milk',
-                                style: AppTextStyle.regular16(AppColor.blackColor),
-                              ),
-                            ),
+                         spacer(),
+                          Text(
+                            '₹ ${_quantity * _selectedAmount}',
+                            style: AppTextStyle.regular16(AppColor.blackColor),
                           ),
                         ],
                       ),

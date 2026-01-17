@@ -1,10 +1,17 @@
+import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../api/api_url.dart';
 import '../../common/common_flex.dart';
+import '../../common/common_snackbar.dart';
+import '../../data/local/shared_preference/shared_preference.dart';
+import '../../data/local/shared_preference/shared_preference_key.dart';
+import '../../services/base_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text_style.dart';
+import '../refile_van_page/refill_page_model.dart';
 
 class InventoryStockPage extends StatefulWidget {
   const InventoryStockPage({super.key});
@@ -14,6 +21,30 @@ class InventoryStockPage extends StatefulWidget {
 }
 
 class _InventoryStockPageState extends State<InventoryStockPage> {
+  Rx<VanDetails> vanDetails = VanDetails().obs;
+
+  RxBool isLoading = false.obs;
+  Future<d.Response?> startRoute()async{
+    isLoading.value = true;
+    d.Response? response = await BaseService().get(ApiUrl.vanRoutes(MySharedPref.getString(PreferenceKey.driverID)));
+    if (response?.statusCode == 200) {
+      isLoading.value = false;
+      vanDetails.value = VanDetails.fromJson(response!.data);
+      return response;
+    }else{
+      isLoading.value = false;
+      CustomSnackBar.showToast(
+        Get.context!,
+        messages:response?.data['message'] ?? "Something went wrong",
+      );
+    }
+    return null;
+  }
+  @override
+  void initState() {
+    startRoute();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +70,11 @@ class _InventoryStockPageState extends State<InventoryStockPage> {
               ),
             ),
             Expanded(
-              child: Container(
+              child:Obx(()=>isLoading.value? Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.primaryColor,
+                ),
+              ):Container(
                 width: double.infinity,
                 color: AppColor.lightGreyColor,
                 child: SingleChildScrollView(
@@ -77,7 +112,7 @@ class _InventoryStockPageState extends State<InventoryStockPage> {
                                       value: 0.9,
                                       strokeWidth: 16.w,
                                       valueColor: const AlwaysStoppedAnimation<Color>(AppColor.greenColor),
-                                        color: AppColor.greenColor,
+                                      color: AppColor.greenColor,
                                       backgroundColor: AppColor.greyColor.withOpacity(0.3),
                                     ),
                                   ),
@@ -111,33 +146,32 @@ class _InventoryStockPageState extends State<InventoryStockPage> {
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Row(
-                                children: const [
-                                  _SummaryTile(title: 'Total Milk', value: '300 ltr'),
-                                  _SummaryTile(title: 'Sold Out', value: '280 ltr'),
-                                  _SummaryTile(title: 'In Stock', value: '20 ltr'),
-                                ],
+                                children:  [
+                                  _SummaryTile(title: 'Total Milk', value: '${vanDetails.value.data?[0].totalCapacity??0} ltr'),
+                                  _SummaryTile(title: 'Sold Out', value:  '${vanDetails.value.data?[0].deliveredMilkLiter??0} ltr'),
+                                  _SummaryTile(title: 'In Stock', value: '${(vanDetails.value.data?[0].subscriptionMilkLiter ?? 0) - (vanDetails.value.data?[0].deliveredMilkLiter ?? 0)} ltr'),                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const _InventoryCard(
+                       _InventoryCard(
                         iconPath: 'assets/images/subscribed.png',
                         title: 'Subscribed Milk',
-                        soldOut: '190 ltr',
-                        inStock: '10 ltr',
+                        soldOut: '${(vanDetails.value.data?[0].subscriptionMilkLiter ?? 0) - (vanDetails.value.data?[0].deliveredMilkLiter ?? 0)} ltr',
+                        inStock: '${vanDetails.value.data?[0].totalCapacity??0} ltr',
                       ),
                       h(18),
-                      const _InventoryCard(
+                       _InventoryCard(
                         iconPath: 'assets/images/milk.png',
                         title: 'Surplus Milk',
-                        soldOut: '90 ltr',
-                        inStock: '10 ltr',
+                        soldOut:'${(vanDetails.value.data?[0].surplusMilkLiter ?? 0) - (vanDetails.value.data?[0].deliveredMilkLiter ?? 0)} ltr',
+                        inStock: '${vanDetails.value.data?[0].totalCapacity??0} ltr',
                       ),
                     ],
                   ),
                 ),
-              ),
+              ),),
             ),
           ],
         ),
